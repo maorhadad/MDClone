@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="MDTest.Views.MainPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MDTest.Views" 
+             xmlns:viewModel="clr-namespace:MDTest.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:MainPageViewModel/>
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="templateForTheHeader" DataType="{x:Type viewModel:TabViewModel}">
+                <TextBlock Text="{Binding TabName, Mode=TwoWay}"/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:DataTableViewModel}">
+
+                <StackPanel Orientation="Vertical">
+                    <Button Content="Load File" Command = "{Binding LoadFileCommand}" Background="Khaki"/>
+                    <DataGrid Name="dataGrid" CanUserResizeColumns="True"
+                        CanUserAddRows="False"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding Persons}"
+                        Width="Auto"
+                        AutoGenerateColumns="False">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="FirstName"  Width="2*" Binding="{Binding FirstName}"/>
+                            <DataGridTextColumn Header="LastName" Width="*" Binding="{Binding LastName}"/>
+                            <DataGridTextColumn Header="Age" Width="*" Binding="{Binding Age}"/>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:EmailViewModel}" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+
+                    </Grid.RowDefinitions>
+
+                    <TextBox  Grid.Row="0" Grid.Column="0"  Text="From:" />
+                    <TextBox  Grid.Row="0" Grid.Column="1" Text="{Binding Path=From, Mode=TwoWay}" IsEnabled="False"/>
+
+                    <TextBox  Grid.Row="1" Grid.Column="0"  Text="To:" />
+                    <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding Path=To, Mode=TwoWay}" />
+
+                    <TextBox  Grid.Row="2" Grid.Column="0"  Text="Title:" />
+                    <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Path=Title, Mode=TwoWay}" />
+
+                    <TextBox  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Path=Content, Mode=TwoWay}" />
+
+                    <Button Grid.Row="4" Grid.Column="0"  Content="SEND" Command = "{Binding SendEmailCommand}"/>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="3*"/>
+
+        </Grid.RowDefinitions>
+        <Label Content="MD Clone interview Test" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontSize="25"/>
+
+        <Border Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="3" Visibility="Visible" BorderThickness="2" BorderBrush="DarkGray" Background="LightGray" >
+            <StackPanel >
+                <Label   Content="Toolbar"  FontSize="10" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="Add Data Table"  Width="200" Command = "{Binding AddDataTableCommand}"/>
+                    <Button Grid.Column="1" Content="Add Send E-Mail" Width="200" Command = "{Binding AddEmailCommand}"/>
+                </Grid>
+               
+            </StackPanel>
+
+        </Border>
+
+        <TabControl x:Name="TabControl1" Margin="10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource = "{Binding Path = Tabs}" SelectedItem="{Binding SelectedTab}" ItemTemplate="{StaticResource templateForTheHeader}" />
+    </Grid>
+</UserControl>
